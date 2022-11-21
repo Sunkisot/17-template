@@ -1,0 +1,32 @@
+<template>
+    <div class="<%= pageName %>-page">
+    <% for(var i = 0; i < rules.length; i++){ -%>
+    <% if (rules[i].description) { -%>
+    <!-- <%= rules[i].description -%> -->
+        <% } -%>
+    <<%= rules[i].name -%> <% Object.keys(rules[i].props).forEach(key => { %><% if (typeof(rules[i].props[key])==='object') { %>:<% } %><%- key -%>="<%- typeof(rules[i].props[key]) === 'string' ? rules[i].props[key] : rules[i].props[key].key -%>" <% }) %> <% rules[i].events.forEach(element => { %>@<%- element.eventName -%>="<%- element.methodName -%>"<% }) %> />
+    <% } -%>
+    </div>
+</template>
+<script><% imports.forEach(element => { %>
+<%- element -%>
+<% }) %>
+export default {
+    name: '<%= pageName %>',
+    components: {<% components.forEach(element => { %>
+        <%- element -%>,<% }) %>
+    },
+    <% Object.keys(model).forEach(key => { %><%- key -%>: <%- JSON.stringify(model[key]) -%>,
+    <% }) %>
+    methods: {
+        <% Object.keys(actions).forEach(key => { %><%- key -%>(<% actions[key].params.forEach(element => { %><%- element -%><% }) %>){
+            <%- actions[key].content -%>     
+        },
+        <% }) %>
+    }
+}
+</script>
+<style lang='<%= style.lang %>' <%= style.scoped ? 'scoped': '' %> >
+    @import '<%= style.src %>';
+</style>
+ 
